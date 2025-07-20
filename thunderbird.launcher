@@ -1,0 +1,12 @@
+#!/bin/sh
+
+REALHOME=$(getent passwd $(id -u) | cut -d ':' -f 6)
+
+# Keep using profile in ~/.thunderbird if it is there by symlinking to it.
+SNAPDOT="$SNAP_USER_COMMON/.thunderbird"
+HOMEDOT="$REALHOME/.thunderbird"
+if [ ! -d "$SNAPDOT" ] && [ -r "$HOMEDOT/profiles.ini" ]; then
+      ln -s "$HOMEDOT" "$SNAPDOT"
+fi
+
+exec "$SNAP/usr/lib/thunderbird/thunderbird-bin" "$@"
